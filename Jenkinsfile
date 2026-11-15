@@ -1,3 +1,4 @@
+
 pipeline {
     agent any
 
@@ -12,7 +13,7 @@ pipeline {
     stages {
         stage('Checkout Source Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/kevinli-webbertech/gs-spring-boot.git'
+                git branch: 'main', url: 'https://github.com/phillipsj6/hw8-springboot-nexus.git'
             }
         }
 
@@ -20,7 +21,7 @@ pipeline {
             steps {
                 sh 'git --version'
                 sh 'mvn --version'
-                sh 'mvn clean test' // Example for a Maven project
+                sh 'mvn clean test'
             }
         }
 
