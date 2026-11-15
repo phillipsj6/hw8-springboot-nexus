@@ -1,4 +1,5 @@
 
+
 pipeline {
     agent any
 
@@ -36,6 +37,23 @@ pipeline {
                 archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
             }
         }
+
+        stage('Publish to Nexus') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'nexus-credentials',
+                    usernameVariable: 'NEXUS_USER',
+                    passwordVariable: 'NEXUS_PASS'
+                )]) {
+                    sh '''
+                        curl --fail --show-error \
+                        --user "$NEXUS_USER:$NEXUS_PASS" \
+                        --upload-file target/spring-boot-complete-0.0.1.jar \
+                        http://172.17.0.2:8081/repository/maven-releases/com/example/spring-boot-complete/0.0.1/spring-boot-complete-0.0.1.jar
+                    '''
+                }
+            }
+        }
     }
 
     post {
@@ -50,3 +68,4 @@ pipeline {
         }
     }
 }
+
